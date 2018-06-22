@@ -35,7 +35,7 @@ if isempty(stream)
     return;
 end
 
-if size(events, 2) ~= 2
+if size(stream, 2) ~= 2
     error('Input stream must be in this type of data structure: [timestamp category]');
 end
 
