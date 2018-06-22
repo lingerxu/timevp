@@ -1,4 +1,10 @@
-function [allpairs, events1_wo, events2_wo] = timevp_extract_pairs_by_subject(subject_list, variable1, variable2, timing_relation, mapping, dir_savefiles)
+function [allpairs, events1_wo, events2_wo] = timevp_extract_pairs_by_subject(subject_list, variable1, variable2, timing_relation, dir_savefiles, mapping, args)
+
+NUM_DEFAULT = 150;
+
+if ~exist('mapping', 'var') || isempty(mapping)
+    mapping = [(1:NUM_DEFAULT)' (1:NUM_DEFAULT)'];
+end
 
 if ~exist('args', 'var') || isempty(args)
     args = struct();
@@ -28,7 +34,7 @@ for sidx = 1:num_subs
     
     file_savename = fullfile(dir_savefiles, sprintf('extract_pairs_%s_%s_%d.csv',variable1, variable2, sub_id));
     
-    [pairs_sub, events1_sub, events2_sub] = timevp_extract_pairs(file_var1, file_var2, timing_relation, mapping, file_savename, args);
+    [pairs_sub, events1_sub, events2_sub] = timevp_extract_pairs(file_var1, file_var2, timing_relation, file_savename, mapping, args);
     
     allpairs{sidx} = pairs_sub;
     events1_wo{sidx} = events1_sub;

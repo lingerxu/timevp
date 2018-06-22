@@ -18,16 +18,22 @@ function stream = event2stream(events, sample_rate, default_value, start_time, e
 % OUTPUT
 %   stream:      the converted stream
 
-if nargin < 2
-    [~, sample_rate] = timevp_config_dataset_info();
-end
-
-if nargin < 3
-    default_value = 0;
+if isempty(events)
+    warning('Input events is empty. Return empty stream.');
+    stream = zeros(0, 2);
+    return;
 end
 
 if size(events, 2) ~= 3
     error('Input events must be in this type of data structure: [onset offset category]');
+end
+
+if nargin < 2
+    sample_rate = timevp_config_dataset_info();
+end
+
+if nargin < 3
+    default_value = 0;
 end
 
 if nargin < 4 

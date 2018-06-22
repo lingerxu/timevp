@@ -1,94 +1,10 @@
-function results = cevent_cal_stats(chunks, args)
-%CEVENT_CAL_STATS Report various stypes of statistics of cevent data
+function results = event_cal_stats(chunks, args)
+%EVENT_CAL_STATS Report various stypes of statistics of event data
 %chunks according to user args.
 % 
-% INPUT: 
-%   CHUNKS: a cell of data. See also GET_VARIABLE,
-%   GET_VARIABLE_BY_GROUPING, GET_VARIABLE_BY_SUBJECT,
-%   GET_VARIABLE_BY_TRIAL, GET_VARIABLE_BY_EVENT, GET_VARIABLE_BY_CEVENT.
-%   INPUT: (optional parameter) a struct that specifies the types of
-%   statistics user wants to calculate. Optional fields are: 
-%       grouping: the grouping method of data chunks, see 
-%       GET_VARIABLE_BY_GROUPING;
-%       categories: categories existing in the data chunks;
-%       nodata_marker: which category value will be considered as non-data
-%       in generating transition matrix;
-%       trans_max_gap: the maximum timing gap that is allowed for two
-%       cevents to be considered as consecutive events in generating
-%       transition matrix;
-%       individual_range_dur: only when data chunks are extracted in
-%       grouping method 'trial' or 'subject', this field is allowed. And,
-%       the existence of this field will lead to calculation of proportion
-%       and frequency in results.
-%       hist_bins: bins for generating histogram according to categories.
-%       high_threshold: for calculating the proportion of time that data
-%       has a category value larger than this category value**;
-%       low_threshold:
-%       whence: value 'start' or 'end', indicating whether the chunks of
-%       data were extracted based on onset/offser of a certain types of
-%       events/cevents.
-%       interval: used with the parameter WHENCE, indicating the starting 
-%       time and ending time when chunks were extracted based on
-%       events/cevents.
-% 
-% OUTPUT:
-%   RESULTS: a struct containing all the statistics. Also, individual
-%   statistic within one chunk of data will be reported.
-% 
-% EXAMPLE:
-%     exp_id = 53;
-%     sub_list = list_subjects(exp_id);
-% 
-%     args.sub_list = sub_list;
-%     args.var_name = 'cevent_human_eye_roi';
-%     args.grouping = 'trial';
-% 
-%     chunks = get_variable_by_grouping('sub', args.sub_list, args.var_name, ...
-%         args.grouping, args);
-% 
-%     chunks_trial_time = arrayfun(@(sub_id) ...
-%         get_trial_times(sub_id), ...
-%         args.sub_list, ...
-%         'UniformOutput', false);
-%     individual_range_dur = vertcat(chunks_trial_time{:});
-%     individual_range_dur = individual_range_dur(:,2) - individual_range_dur(:,1);
-%     args.individual_range_dur = individual_range_dur;
-% 
-%     results = cevent_cal_stats(chunks, args);
-% Example results:
-%     results = 
-%                       categories: [1 2 3 4]
-%                     total_number: 6459
-%                individual_number: [59x1 double]
-%              total_number_by_cat: [1286 1902 1279 1992]
-%         individual_number_by_cat: [59x4 double]
-%                         mean_dur: 0.9074
-%              individual_mean_dur: [59x1 double]
-%                  mean_dur_by_cat: [1.2025 0.8770 1.1315 0.6020]
-%       individual_mean_dur_by_cat: [59x4 double]
-%                       median_dur: 0.4220
-%                median_dur_by_cat: [0.5160 0.3600 0.4690 0.4210]
-%                             prop: 0.8279
-%                      prop_by_cat: [0.2639 0.2846 0.2469 0.2046]
-%                  individual_prop: [59x1 double]
-%           individual_prop_by_cat: [59x4 double]
-%                             freq: 54.7462
-%                      freq_by_cat: [10.9001 16.1213 10.8408 16.8841]
-%                  individual_freq: [59x1 double]
-%           individual_freq_by_cat: [59x4 double]
-%                 range_time_total: 7.0788e+003
-%            individual_range_dur: [59x1 double]
-%                         switches: 43.6512
-%              individual_switches: [59x1 double]
-%                     trans_matrix: [4x4 double]
-%          individual_trans_matrix: {59x1 cell}
-%                trans_freq_matrix: [4x4 double]
-%     individual_trans_freq_matrix: {59x1 cell}
-%
-%   See also: EVENT_SINGLE_STATS, GET_VARIABLE_BY_GROUPING
-% 
-% For more example, go to: 
-% https://einstein.psych.indiana.edu/trac/browser/projects/txu_remodule/txu_test_stats_cevent.m
+% For examples and usage, go to: 
+% demo_timevp_compute_statistics.m
+
 
 if isempty(chunks)
     warning('The args CHUNKS is empty, there is no data inside, the function will return now');
@@ -103,12 +19,6 @@ if ~exist('args', 'var')
     args.none_filed = 'No information here';
 end
 
-% if isfield(args, 'var_name')
-%     if ~strcmp(get_data_type(args.var_name), 'cevent')
-%         error('Error! This function can only accept CEVENT data type');
-%     end
-% end
-
 if isfield(args, 'sub_list')
     results.sub_list = args.sub_list;
 end
@@ -119,7 +29,7 @@ else
     grouping = '';
 end
 
-% If user only wants to calculate stats for cevents that fall within a
+% If user only wants to calculate stats for events that fall within a
 % specified duration range
 if isfield(args, 'min_dur_thresh')
     for cidx = 1:length(chunks)
@@ -251,15 +161,15 @@ end
 
 %% calculate statistics
 cat_chunks_by_cat = arrayfun(@(category_one) ...
-    cevent_category_equals(cat_chunks, category_one), ...
+    event_category_equals(cat_chunks, category_one), ...
     categories, ...
     'UniformOutput', false);
 
-cat_chunks = cevent_category_equals(cat_chunks, categories);
+cat_chunks = event_category_equals(cat_chunks, categories);
 cat_durations = cat_chunks(:,2) - cat_chunks(:,1);
 
 if sum(ismember([0 NaN], unique(cat_chunks(:,3)))) > 0
-    warning(['This cevent variable contains category value 0, ' ...
+    warning(['This event variable contains category value 0, ' ...
         'transition matrix cannot be calculated']);
     has_transition_matrix = false;
 else
@@ -284,7 +194,7 @@ for chunkidx = 1:length(chunks)
     chunk_one = chunks{chunkidx};    
     
     if ~isempty(chunk_one)
-        chunk_one = cevent_category_equals(chunk_one, categories);
+        chunk_one = event_category_equals(chunk_one, categories);
     end
     
     if isempty(chunk_one)
@@ -295,18 +205,18 @@ for chunkidx = 1:length(chunks)
     end
     
     for catidx = 1:length(categories)
-        category_one = cevent_category_equals( ...
+        events_one = event_category_equals( ...
             chunk_one, categories(catidx));
         
         individual_number_by_cat(chunkidx, catidx) = ...
-            event_number(category_one);
+            event_number(events_one);
         individual_mean_dur_by_cat(chunkidx, catidx) = ...
-            event_average_dur(category_one);
+            event_average_dur(events_one);
         individual_median_dur_by_cat(chunkidx, catidx) = ...
-            event_median_dur(category_one);
+            event_median_dur(events_one);
         
         chunk_one_by_cat = arrayfun(@(category_id) ...
-            cevent_category_equals(chunk_one, category_id), ...
+            event_category_equals(chunk_one, category_id), ...
             categories, ...
             'UniformOutput', false);
     end
@@ -425,7 +335,7 @@ end
 
 % number of switches between categories
 individual_switches = cellfun(@(chunk) ...
-    cevent_number_switches(chunk, categories), ...
+    event_number_switches(chunk, categories), ...
     chunks, ...
     'UniformOutput', false);
 individual_switches = vertcat(individual_switches{:});

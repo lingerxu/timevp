@@ -1,5 +1,7 @@
 function [allpairs, events1_wo, events2_wo] = timevp_extract_pairs(filename1, filename2, timing_relation, savefilename, mapping, args)
 
+NUM_DEFAULT = 150;
+
 if ~exist('args', 'var') || isempty(args)
     args = struct();
 end
@@ -13,14 +15,13 @@ if ~isfield(args, 'files_columns')
 end
 
 if ~exist('mapping', 'var') || isempty(mapping)
-    mapping = (1:100)';
-    mapping(:,2) = args.mapping(:,1);
+    mapping = [(1:NUM_DEFAULT)' (1:NUM_DEFAULT)'];
 end
 
 if isfield(args, 'sample_rate')
     sample_rate = args.sample_rate;
 else
-    [~, sample_rate] = timevp_config_dataset_info();
+    sample_rate = timevp_config_dataset_info();
 end
 % 
 % if ~isfield(args, 'cevent_trials_numheaders')

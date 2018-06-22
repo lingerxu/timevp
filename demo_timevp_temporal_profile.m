@@ -1,7 +1,6 @@
 clearvars;
 
 addpath('timevp_lib')
-num_demo_subs = 10;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MODULE 4: Plot temporal profiles
@@ -10,9 +9,8 @@ num_demo_subs = 10;
 % infant's looking behavior matches with their manual behavior. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-subject_list = yulab_list_subjects('toyroom');
-subject_list = subject_list(1:num_demo_subs);
-num_categories = 25;
+subject_list = [7002 7003 7005 7006];
+num_categories = 3;
 
 profile_input.sub_list = subject_list;
 profile_input.segment_event = 'cevent_speech_naming_local-id';
@@ -25,10 +23,11 @@ profile_input.event_category = 1:num_categories;
 
 % Each row corresponding to a cstream value
 % Each column corresponding to a cevent value
-profile_input.groupid_matrix = ones(num_categories, num_categories) * 2;
-for i = 1:num_categories
-    profile_input.groupid_matrix(i,i) = 1;
-end
+profile_input.groupid_matrix = [...
+    1 2 2
+    2 1 2
+    2 2 1
+    ];
 profile_input.groupid_label = {'match', 'not match'};
 
 input = profile_input;

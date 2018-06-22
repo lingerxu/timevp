@@ -1,9 +1,7 @@
-% function demo_timevp_extract_measures(demo_id)
-clearvars;
+function demo_timevp_extract_measures(demo_id)
+% clearvars;
 addpath('timevp_lib')
-num_demo_subs = 10;
-
-demo_id = 4;
+num_demo_subs = 3;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MODULE 3: Extract variable measures based on one type of events

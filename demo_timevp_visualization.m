@@ -9,7 +9,7 @@ function demo_timevp_visualization(demo_id)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 addpath('timevp_lib')
-num_demo_subs = 10;
+num_demo_subs = 3;
 
 %% Method 1: enter a list of csv files and visualize the data
 if demo_id == 1
@@ -56,7 +56,7 @@ elseif demo_id == 2
     % enter a directory for storing all visualization plots
     vis_args.dir_plots = 'vis_streams';
     vis_args.annotation = {'child eye', 'child hand', 'parent eye', 'parent hand', 'parent naming'};
-    vis_args.windows = [30 250; 250 500; 500 750];
+    vis_args.windows = [30 280; 280 530; 530 780];
     % Create visualization by subject: one plot per subject with multiple
     % variables
     vis_args.is_plot_by_subject = true;

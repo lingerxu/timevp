@@ -30,7 +30,7 @@ function result = stream2event(stream, sample_rate, include_zero)
 %  Last modified by txu@indiana.edu
 
 if nargin < 2
-    [~, sample_rate] = timevp_config_dataset_info();
+    sample_rate = timevp_config_dataset_info();
 end
 
 len_stream = size(stream, 1);
@@ -45,6 +45,8 @@ if ~exist('include_zero', 'var')
     include_zero = false;
 end
 
+MULTIPLIER = 1.2;
+
 gap = 0;
 result(1, 1) = stream(1, 1);   % start timestamp
 result(1, 3) = stream(1, 2);   % value
@@ -52,7 +54,7 @@ result(1, 3) = stream(1, 2);   % value
 idx = 1;
 for i = 2:len_stream
     gap = stream(i,1) - stream(i-1,1);
-    if gap > sample_rate || stream(i,2) ~= stream(i-1,2)
+    if gap > (sample_rate*MULTIPLIER) || stream(i,2) ~= stream(i-1,2)
         idx = idx + 1;
         result(idx-1,2) = stream(i-1,1) + sample_rate;
         result(idx,1) = stream(i,1);

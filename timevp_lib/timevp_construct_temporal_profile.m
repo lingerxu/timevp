@@ -23,7 +23,7 @@ end
 
 if ~isfield(input, 'event_category')
     error(['When data are regrouped by events, the field ' ...
-        'CEVENT_CATEGORY must be specified.']);
+        'EVENT_CATEGORY must be specified.']);
 else
     event_category = input.event_category;
 end
@@ -37,7 +37,7 @@ end
 if isfield(input, 'sample_rate')
     sample_rate = input.sample_rate;
 else
-    [~, sample_rate] = timevp_config_dataset_info();
+    sample_rate = timevp_config_dataset_info();
 end
 
 % if strcmp(whence, 'start')
@@ -52,18 +52,18 @@ segment_event = input.segment_event;
 var_name = input.var_name;
 
 % check if variable exists for all subjects
-x_has_var_cevent = arrayfun( ...
+x_has_var_event = arrayfun( ...
     @(sub_id) ...
     has_variable(sub_id, segment_event), ...
     sub_list, ...
     'UniformOutput', 0);
-x_has_var_cevent = vertcat(x_has_var_cevent{:});
+x_has_var_event = vertcat(x_has_var_event{:});
 
-if sum(~x_has_var_cevent) > 0
-    missvar_sub_list = num2str(sub_list(~x_has_var_cevent)');
+if sum(~x_has_var_event) > 0
+    missvar_sub_list = num2str(sub_list(~x_has_var_event)');
     fprintf('Variable %s does not exist for subject(s) %s\n', segment_event, missvar_sub_list);
 end
-mask_has_variable = x_has_var_cevent;
+mask_has_variable = x_has_var_event;
 
 groupid_matrix = input.groupid_matrix;
 groupid_list = unique(groupid_matrix);
@@ -76,7 +76,7 @@ if iscell(input.var_name)
     
     if size(groupid_matrix, 1) ~= num_vars
         error(['In ''groupid_matrix'', each row corresponding to a cstream ROI value or the order of cont type ' ...
-            'variable, and each column corresponding to a cevent value. So, if you input a cell list of ' ...
+            'variable, and each column corresponding to a event value. So, if you input a cell list of ' ...
             'cont variables in the grouping variable list, the number and order of the variables ' ...
             'should match with the rows in groupid_matrix.']);
     end
@@ -116,13 +116,13 @@ end
 
 if size(groupid_matrix, 1) ~= length(var_category)
     error(['In ''groupid_matrix'', each row corresponding to a cstream ROI value or the order of cont type ' ...
-        'variables, and each column corresponding to a cevent value. So, the number of values in ' ...
+        'variables, and each column corresponding to a event value. So, the number of values in ' ...
         '''var_category'' should match with the number of rows in groupid_matrix.']);
 end
 
 if size(groupid_matrix, 2) ~= length(event_category)
     error(['In ''groupid_matrix'', each row corresponding to a cstream value/variable, and ' ...
-        'each column corresponding to a cevent value. So, the number of values in ' ...
+        'each column corresponding to a event value. So, the number of values in ' ...
         '''event_category'' should match with the number of columns in groupid_matrix.']);
 end
 
@@ -188,18 +188,18 @@ for sidx = 1:length(sub_list)
         continue
     end
 
-    % After retrieving cevent data, start getting cont/cstream
+    % After retrieving event data, start getting cont/cstream
     % variables
     result_sub_list{sidx, 1} = repmat(sub_id, num_events, 1);
     result_events{sidx, 1} = event_data;
     result_event_index{sidx, 1} = (1:num_events)'; 
     probs_mean_sub = nan(num_events, num_groupids);
 
-    temporal_ranges = cevent_relative_intervals(...
+    temporal_ranges = event_relative_intervals(...
         event_data, input.whence, input.interval);
 
     if isfield(input, 'within_ranges') && ~input.within_ranges
-        temporal_ranges = get_cevent_opposite(sub_id, event_data, trials_one);
+        temporal_ranges = get_event_opposite(sub_id, event_data, trials_one);
     end
 
     result_ranges{sidx, 1} = temporal_ranges;
@@ -251,7 +251,7 @@ for sidx = 1:length(sub_list)
             mask_cvalues = ismember(event_data(:, 3), event_values);
 %             chunks_var_by_cvalue = chunks_var_origin(mask_cvalues);
 %             chunks_ranges = temporal_ranges(mask_cvalues);
-%             num_cevents_value = sum(mask_cvalues);
+%             num_events_value = sum(mask_cvalues);
             
             for lidx = 1:length(label_column_list)
                 label_one = label_column_list(lidx);
@@ -292,9 +292,9 @@ for sidx = 1:length(sub_list)
             mask_cvalues = ismember(event_data(:, 3), event_values);
             chunks_var_by_cvalue = chunks_var_origin(mask_cvalues);
             chunks_ranges = temporal_ranges(mask_cvalues);
-            num_cevents_value = sum(mask_cvalues);
+            num_events_value = sum(mask_cvalues);
 
-            mat_var_profile = nan(num_cevents_value, length_profile);
+            mat_var_profile = nan(num_events_value, length_profile);
 
             for cnidx = 1:size(chunks_ranges, 1)
                 range_one = chunks_ranges(cnidx, :);
@@ -323,7 +323,7 @@ for sidx = 1:length(sub_list)
 
             chunks_check_mat(mask_cvalues, :) = mat_origin_profile;
             chunks_var_mat(mask_cvalues, :) = mat_var_profile;
-        end % end of going through cevent categorical values
+        end % end of going through event categorical values
 
         for gidx = 1 : num_groupids
             label_target = groupid_list(gidx);
@@ -356,7 +356,7 @@ result_probs_mean = vertcat(result_probs_mean{:});
 % subID	expID	onset	offset	category	instanceID
 profile_data.sub_list = vertcat(result_sub_list{:});
 profile_data.events = vertcat(result_events{:});
-profile_data.cevent_instanceid = vertcat(result_event_index{:});
+profile_data.event_instanceid = vertcat(result_event_index{:});
 profile_data.probs_mean_per_instance = result_probs_mean;
 
 if isfield(input, 'groupid_label')

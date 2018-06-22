@@ -94,7 +94,7 @@ end
 if isfield(args, 'sample_rate')
     sample_rate = args.sample_rate;
 else
-    [dir_dataset, sample_rate] = timevp_config_dataset_info();
+    sample_rate = timevp_config_dataset_info();
 end
 
 if isfield(args, 'is_closeplot')

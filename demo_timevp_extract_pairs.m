@@ -6,7 +6,7 @@ function demo_timevp_extract_pairs(demo_id)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 addpath('timevp_lib')
-num_demo_subs = 10;
+num_demo_subs = 3;
 
 %% Overview
 % Finds moments from two cevents that match a specified temporal relation
@@ -68,7 +68,7 @@ if demo_id == 1
     mapping = [(1:25)' (1:25)'];
     savefilename = fullfile('yulab_analysis', 'example_extract_pairs.csv');
 
-    timevp_extract_pairs(filename1, filename2, timing_relation, mapping, savefilename);
+    timevp_extract_pairs(filename1, filename2, timing_relation, savefilename, mapping);
 elseif demo_id == 2
     % One can also extract pairs by a list of subjects, two variable names and
     % a folder to save all csv files.
@@ -77,8 +77,7 @@ elseif demo_id == 2
     subject_list = yulab_list_subjects('toyroom');
     subject_list = subject_list(1:num_demo_subs);
     timing_relation = 'more(on1, off2, 0.3) & less(off1, on2, 1)';
-    mapping = [(1:25)' (1:25)'];
     
     dir_savefiles = 'yulab_analysis';
-    timevp_extract_pairs_by_subject(subject_list, variable1, variable2, timing_relation, mapping, dir_savefiles);
+    timevp_extract_pairs_by_subject(subject_list, variable1, variable2, timing_relation, dir_savefiles);
 end

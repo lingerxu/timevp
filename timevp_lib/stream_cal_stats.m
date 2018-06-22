@@ -1,53 +1,9 @@
-function results = cstream_cal_stats(chunks, args)
-%CSTREAM_CAL_STATS Report various stypes of statistics of cstream type data 
+function results = stream_cal_stats(chunks, args)
+%STREAM_CAL_STATS Report various stypes of statistics of stream type data 
 %chunks according to user args.
 % 
-% INPUT: 
-%   CHUNKS: a cell of data streams.
-% 
-% OUTPUT:
-%   RESULTS: a struct containing all the statistics. Also, individual
-%   statistic within every chunk of data will be reported.
-%   For transition matrix, matrix(i, j) is the count of 
-%       the transitions from value i to value j (i->j).
-% 
-% EXAMPLE:
-%     exp_id = 18;
-%     subject_list = list_subjects(exp_id);
-%     args.subject_list = subject_list;
-% 
-%     args.var_name = 'cstream_cam1_dominant_obj';
-%     args.grouping = 'cevent';
-%     args.cevent_name = 'cevent_inhand_child';
-%     args.cevent_values = 1;
-%     args.whence = 'start';
-%     args.interval = [-2 0];
-%     args.nodata_marker = 0;
-% 
-%     chunks = get_variable_by_grouping('sub', args.subject_list, args.var_name, ...
-%         args.grouping, args);
-% 
-%     results = cstream_cal_stats(chunks, args);
-% Example results:
-% results = 
-% 
-%                 categories: [0 1 2 3 4 5]
-%                       prop: 0.1987
-%                prop_by_cat: [0.8013 0.0884 0.0094 0.0413 0.0245 0.0352]
-%            individual_prop: [155x1 double]
-%     individual_prop_by_cat: [155x6 double]
-%              temporal_time: [20x1 double]
-%             temporal_probs: [20x5 double]
-%            temporal_chunks: [20x155 double]
-%             temporal_count: [20x5 double]
-%               trans_matrix: [5x5 double]
-%                EVENT_STATS: '----------convert to events from here-----------'
-%                event_stats: [1x1 struct]
-% 
-%   See also: GET_VARIABLE_BY_GROUPING
-% 
-% For more example, go to: 
-% https://einstein.psych.indiana.edu/trac/browser/projects/txu_remodule/txu_test_stats_cstream.m
+% For examples and usage, go to: 
+% demo_timevp_compute_statistics.m
 
 % check fileds in 'args'
 if ~exist('args', 'var')
@@ -70,7 +26,7 @@ end
 if isfield(args, 'sample_rate')
     sample_rate = args.sample_rate;
 else
-    [~, sample_rate] = timevp_config_dataset_info();
+    sample_rate = timevp_config_dataset_info();
 end
 
 cat_chunks = cat(1,chunks{:});
@@ -177,25 +133,22 @@ if is_cal_temporal
     results.temporal_count = res_temporal_count;
 end
 
-% disp(['For all the cevents statistics, please extract cevent data chunks,' ...
-%     ' and call function cevent_cal_stats']);
+% disp(['For all the events statistics, please extract event data chunks,' ...
+%     ' and call function event_cal_stats']);
 
-is_cal_cevent_stats = true;
-if is_cal_cevent_stats
-    % convert to cevents
-    cevent_chunks = cellfun(@(chunk_one) ...
-        cstream2cevent(chunk_one, sample_rate), ...
+is_cal_event_stats = true;
+if is_cal_event_stats
+    % convert to events
+    event_chunks = cellfun(@(chunk_one) ...
+        stream2event(chunk_one, sample_rate), ...
         chunks, ...
         'UniformOutput', false);
-    args_cevents = args;
-    if isfield(args, 'var_name')
-        args_cevents.var_name = ['cevent'  args.var_name((length('cstream')+1):end)];
-    end
-    cevent_stats = cevent_cal_stats(cevent_chunks, args_cevents);
+    args_events = args;
+    event_stats = event_cal_stats(event_chunks, args_events);
 
-    results.trans_matrix = cevent_stats.trans_matrix;
-    results.individual_trans_matrix = cevent_stats.individual_trans_matrix;
+    results.trans_matrix = event_stats.trans_matrix;
+    results.individual_trans_matrix = event_stats.individual_trans_matrix;
     results.EVENT_STATS = '----------convert to events from here-----------';
-    results.event_stats = cevent_stats;
+    results.event_stats = event_stats;
 end
 

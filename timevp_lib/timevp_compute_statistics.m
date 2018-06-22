@@ -1,5 +1,9 @@
 function result_stats = timevp_compute_statistics(variable_name, subject_list, args)
 
+if nargin < 3
+    args = struct();
+end
+    
 num_subs = length(subject_list);
 is_event = false;
 
@@ -13,7 +17,7 @@ if length(num_cols_data) > 1
     if isfield(args, 'sample_rate')
         sample_rate = args.sample_rate;
     else
-        [~, sample_rate] = timevp_config_dataset_info();
+        sample_rate = timevp_config_dataset_info();
     end
 
     for cidx = 1:num_subs
@@ -39,9 +43,9 @@ end
 args.subject_list = subject_list;
 
 if is_event
-    result_stats = cevent_cal_stats(chunks, args);
+    result_stats = event_cal_stats(chunks, args);
 else
-    result_stats = cstream_cal_stats(chunks, args);
+    result_stats = stream_cal_stats(chunks, args);
 end
 
 result_stats.data_list = chunks;

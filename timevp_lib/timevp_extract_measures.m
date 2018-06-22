@@ -90,7 +90,7 @@ for sidx = 1:num_subs
             if isempty(var_sub)
                 results_variables = [results_variables nan(num_events, num_categories)];
             else
-                results_one = cstream_cal_stats(var_sub, args);
+                results_one = stream_cal_stats(var_sub, args);
                 results_variables = [results_variables results_one.individual_prop_by_cat];
             end
 
@@ -108,7 +108,7 @@ for sidx = 1:num_subs
             if isempty(var_sub)
                 results_variables = [results_variables nan(num_events, num_categories*3)];
             else
-                results_one = cevent_cal_stats(var_sub, args);
+                results_one = event_cal_stats(var_sub, args);
                 results_variables = [results_variables results_one.individual_prop_by_cat ...
                     results_one.individual_mean_dur_by_cat, results_one.individual_number_by_cat];
             end
