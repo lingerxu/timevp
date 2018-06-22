@@ -29,6 +29,16 @@ function result = stream2event(stream, sample_rate, include_zero)
 %  
 %  Last modified by txu@indiana.edu
 
+if isempty(stream)
+    warning('Input events is empty. Return empty stream.');
+    result = zeros(0, 3);
+    return;
+end
+
+if size(events, 2) ~= 2
+    error('Input stream must be in this type of data structure: [timestamp category]');
+end
+
 if nargin < 2
     sample_rate = timevp_config_dataset_info();
 end
