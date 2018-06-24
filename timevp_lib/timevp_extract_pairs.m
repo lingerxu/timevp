@@ -55,7 +55,7 @@ end
 [allpairs, events1_wo, events2_wo] = extract_pairs(events1, events2, timing_relation, mapping, args);
 
 h1 = sprintf('%s,%s,,,%s,,,',strrep(strrep(timing_relation, ' ', '_'), ',', ';'), filename1, filename2);
-h2 = sprintf('onset1, offset1, category1, index1, onset2, offset2, category2, index2, pair ID');
+h2 = sprintf('onset1, offset1, category1, index1, onset2, offset2, category2, index2, pair type');
 headers = {h1, h2};
 
 if exist('savefilename', 'var') && ~isempty(savefilename)

@@ -1,4 +1,4 @@
-function [allpairs, cev1wo, cev2wo] = extract_pairs(events1, events2, timing_relation, mapping, args)
+function [allpairs, events1_wo, events2_wo] = extract_pairs(events1, events2, timing_relation, mapping, args)
 %% Overview
 % Finds moments from two cevents that match a specified temporal relation
 % 
@@ -142,8 +142,8 @@ if ~isfield(args, 'pairtype')
     args.pairtype = ones(1, numel(mapping));
 end
 allpairs = [];
-cev1wo = [];
-cev2wo = [];
+events1_wo = [];
+events2_wo = [];
 
 if ~isempty(events1) && ~isempty(events2)
     events1 = sortrows(events1, [1 2 3]);
@@ -247,11 +247,10 @@ if ~isempty(events1) && ~isempty(events2)
         if ~isempty(idx_keep)
             allpairs = allpairs(idx_keep, :);
         end
-        
-        log = ~ismember(events1(:, IDX_INS1), allpairs(:, IDX_INS2));
-        cev1wo = events1(log,:);
-        log = ~ismember(events2(:, IDX_INS1), allpairs(:, IDX_INS2));
-        cev2wo = events2(log,:);
+        log = ~ismember(events1(:, end), allpairs(:, IDX_INS1));
+        events1_wo = events1(log,:);
+        log = ~ismember(events2(:, end), allpairs(:, IDX_INS2));
+        events2_wo = events2(log,:);
     end
 end
 end
