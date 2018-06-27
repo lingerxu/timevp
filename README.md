@@ -54,10 +54,10 @@ git clone https://github.com/lingerxu/timevp.git
   4. Open *timevp_config_dataset_info.m* to set the data directory to your own data directory and sampling rate of your time series data. If you data was collected at 10 HZ (10 data points per second), then your sampling rate is 0.1. In our example dataset, the time series data were collected at 30 HZ, so the sampling rate is roughly 0.034.
 
     e.g.
-    ```
-    sample_rate = 0.034;
-    dir_dataset = 'yulab_data';
-    ```
+
+        sample_rate = 0.034;
+        dir_dataset = 'yulab_data';
+
 
   5. Open each demo file and start analyzing your data! Each demo file is independent from each other.
 
