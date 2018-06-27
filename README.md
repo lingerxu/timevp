@@ -10,8 +10,11 @@ git clone https://github.com/lingerxu/timevp.git
 ```
 2. Open Matlab and set your working path to the folder containing the downloaded toolkit.
 3. Create a data folder and put all csv files in the data directory.
+
     The csv files contain time series type data. This toolkit supports two types of time series data structure:
+
     **stream**: a stream of time series data. The csv file should contain a N by 2 matrix. N is the length of the time series. Two columns are [timestamp category_value].
+
         e.g.
                    344.7000   32.0000
                    344.8000   34.0000
@@ -25,6 +28,7 @@ git clone https://github.com/lingerxu/timevp.git
                    345.6000   32.0000
 
     **event**: time series events with start time and end time. The csv file should contain a N by 3 matrix. N is the total number of events. Three columns are [onset offset category_value].
+    
         e.g.
                     69.0280   69.9450     1.0000
                     72.5080   73.8050     4.0000
