@@ -33,7 +33,7 @@ variable1 = 'cevent_eye_roi_child';
 variable2 = 'cevent_eye_roi_parent';
 subject_list = [7002 7003 7006];
 timing_relation = 'more(on2, off1) & more(on1, on2)';
-dir_savefiles = 'timevp_output_files/timevp_output_files';
+dir_savefiles = 'timevp_output_files';
 %%
 timevp_extract_pairs_by_subject(subject_list, variable1, variable2, timing_relation, dir_savefiles);
 
