@@ -8,7 +8,7 @@ addpath('timevp_lib')
 %% a subject list
 subject_list = [7002 7003  7005 7006 7008]; 
 variable_name = 'cevent_speech_naming_local-id';
-output_file = 'compute_stats2.csv'; 
+output_file = 'timevp_output_files/compute_stats2.csv'; 
 
 
 %%

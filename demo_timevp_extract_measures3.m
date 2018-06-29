@@ -12,7 +12,7 @@ args.groupid_matrix = [1 2 2;
                        2 1 2;
                        2 2 1];
 args.group_label = {'target', 'distractor'};
-save_filename = 'example_extract_measures3.csv';
+save_filename = 'timevp_output_files/example_extract_measures3.csv';
 
 %%
 timevp_extract_measures(subject_list, variable_list, segment_event, save_filename, args);

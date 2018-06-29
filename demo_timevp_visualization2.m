@@ -14,6 +14,6 @@ csvfile_list = {'yulab_data\1203\cevent_eye_roi_child.csv', ...
 % set parameters for generating visualization plots
 vis_args.annotation = {'1203' '1205' '1206' '1208'};
 vis_args.windows = [0 100; 101 200; 201 300; 301 400];
-vis_args.save_name = 'vis_streams\timevp_vis_streams_example2';
+vis_args.save_name = 'timevp_output_files/timevp_vis_streams_example2';
 
 timevp_visualization(csvfile_list, vis_args);
