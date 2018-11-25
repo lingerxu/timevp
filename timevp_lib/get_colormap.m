@@ -35,7 +35,7 @@ end
 if is_plot_colormap
     num_colors = size(colormap, 1);
     h_colormap = figure('Position', [20 20 300 1000], 'Visible', 'off'); % 
-    size_unit = 20;
+    size_unit = n;
     hold on;
     for i = 1:num_colors
         colorone = colormap(i, :);
@@ -52,7 +52,7 @@ if is_plot_colormap
     % set(gca, 'YTick',[]);
     set(gca,'Visible','off');
     hold off;
-    title_str = sprintf('colormap %d colormap', num_colors);
+    title_str = sprintf('colormap %d', num_colors);
     text(mean(plot_x), -size_unit, title_str, 'HorizontalAlignment', 'center');
     set(h_colormap,'PaperPositionMode','auto');
     saveas(h_colormap, [title_str '.png']);
